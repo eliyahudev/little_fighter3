@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ynkosfvphy7f"]
+
+[ext_resource type="Script" uid="uid://dphpvtp7jummt" path="res://level0.gd" id="1_vfa6b"]
+
+[node name="level0" type="TileMapLayer" unique_id=1964588101]
+script = ExtResource("1_vfa6b")
