@@ -1,5 +1,7 @@
 class_name StateMachine extends Node
 
+signal state_changed(previous_state: State, active_state: State)
+
 @export var initial_state: State
 
 var active_state: State
@@ -21,7 +23,9 @@ func _physics_process(delta: float) -> void:
 func change_state(new_state:State) -> void:
 	if new_state == active_state:
 		return
-		
+
+	var previous_state := active_state
+
 	if active_state:
 		active_state.exit_state()
 	
@@ -29,3 +33,5 @@ func change_state(new_state:State) -> void:
 
 	if active_state:
 		active_state.enter_state()
+
+	state_changed.emit(previous_state, active_state)

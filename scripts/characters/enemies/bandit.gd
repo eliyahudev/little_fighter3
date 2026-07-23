@@ -1,97 +1,58 @@
 extends CharacterBody2D
 
 @export var stats: Stats
+@export var hitbox_shape: Shape2D
+@export var hitbox_offset := Vector2(10, 5)
+@export var hitbox_scale := Vector2(0.5, 1)
+@export var hitbox_lifetime := 0.3
+@export var attack_roll_interval := 1.0
+@export var current_state: StateMachine
+@export_range(0.0, 1.0) var attack_chance := 0.5
 
-const SPEED = 40.0
+
+const SPEED = 80.0
 const JUMP_VELOCITY = -400.0
 
-var can_attack := true
-var is_attacking := false
-
-var player_chase = false
 var player = null
 
-var last_position: Vector2
+var is_coldown := false
+var is_area_exited := false
+
 
 const MAX_HEALTH = 10.0
 var health = MAX_HEALTH
 
-var is_hitted = 0;
 var facing_left := false
 var is_alive = 1
 
-@onready var health_label: Label = $ProgressBar/healthLabel
+var player_hit := false
+var attack_roll_cooldown := 0.0
+
 @onready var health_bar: HealthBar = $HealthBar
-	
-@onready var enemy: AnimatedSprite2D = $animated_bandit
 @onready var cooldown_timer: Timer = $Timer
+@onready var enemy: AnimatedSprite2D = $animated_bandit
+@onready var detection_area: Area2D = $detection_area
+@onready var hurtbox: Hurtbox = $Hurtbox
 
 func _ready() -> void:
-	last_position = position
-	#set_health_label()
-	health = MAX_HEALTH
-	#set_health_bar()
-	
+	health = MAX_HEALTH	
 	cooldown_timer.timeout.connect(_on_timer_timeout)
-
-#func set_health_label() -> void:
-	#health_label.text = "health %s" % health
-
-#func set_health_bar() -> void:
-	#progress_bar.value = health
-
-#func demage()->void:
-	#health -= 1
-	#set_health_label()
-	#set_health_bar()
+	hurtbox.owner_hit.connect(_take_demage)
 	
-func _physics_process(delta: float) -> void:
-	#var direction :=  Input.get_axis("ui_left", "ui_right")
-	#var y_direction := Input.get_axis("ui_up", "ui_down")
-
-	#velocity = Vector2.ZERO
-	#direction * SPEED
-	#velocity.y = 
-	#y_direction * SPEED
-
-	#if direction < 0:
-		#enemy.flip_h = true
-	#elif direction > 0:
-		#enemy.flip_h = false
-
-	#if Input.is_action_just_pressed("mealy-attack") :
-		#attack()
-	if is_alive:
-		if is_hitted:
-			enemy.play("hitted")
-		elif player_chase:
-			position +=  (player.position - position) / SPEED
-			enemy.play("walk")
-		else:
-			enemy.play("idle")
-		#if not is_attacking:
-			#if direction == 0 and y_direction == 0:
-				#enemy.play("idle")
-			#else:
-				#enemy.play("walk")
-		#pass
-		move_and_slide()
-		var relative_position = position - last_position
-
-		if relative_position.x < 0:
-			facing_left = true
-		elif relative_position.x > 0:
-			facing_left = false
-
-		enemy.flip_h = facing_left
-		last_position = position
-
-
+func player_exit_area():
+	if is_area_exited:
+		player = null
+		player_hit = false 
+		return true
+	return false
+	
+func activate_battle_mode() -> void:
+	attack()
+	
 func animated_hit() -> void:
-	is_hitted = 1
 		
 	enemy.flip_h = not facing_left
-	if stats.health == 10:
+	if stats.health < 30:
 		enemy.play("critic hitted")
 	else:
 		enemy.play("hitted")
@@ -99,30 +60,76 @@ func animated_hit() -> void:
 	
 	if stats.health == 0:
 		enemy.play("die")
-		is_alive = 0
-		
-#func attack() -> void:
-	#can_attack = false
-	#is_attacking = true
-	#enemy.play("punch")
-	#print("punch")
-	#cooldown_timer.start()
-#
-#
-func _on_timer_timeout() -> void:
-	is_hitted = 0
-	#can_attack = true
-	#is_attacking = false
-	#
-	#enemy.play("idle")
-	#print("done")
 
+func is_player_in_range():
+	if is_coldown:
+		return false
+	var pos_x = (player.position - position).x
+	var pos_y = (player.position - position).y
+	
+	if abs(pos_x) < 25.0:
+		return true
+	if abs(pos_y) > 25.0:
+		return true
+	return false
+	
+func attack() -> void:
+	var attack_rate = randf()
+	if attack_rate < attack_chance:
+		enemy.play("punch")
+		spawn_attack_hitbox()
+		is_coldown = true
+		cooldown_timer.start()
+
+func idle_player() -> void:
+	enemy.play("idle")
+
+func chase_player() -> void:
+	#detection_area
+	face_target(player)
+
+	var pos_x = (player.position - position).x
+	var pos_y = (player.position - position).y
+	
+	if not is_coldown:
+		if abs(pos_x) > 18.0:
+			position.x += pos_x / SPEED
+			enemy.play("walk")
+		if abs(pos_y) > 18.0:
+			position.y += pos_y / SPEED
+			enemy.play("walk")
+		#position +=  (player.position - position) / SPEED
+		if not abs(pos_y) > 18.0 and not abs(pos_x) > 18.0:
+			enemy.play("idle")
+		
+func spawn_attack_hitbox() -> void:
+	var facing_sign := -1 if facing_left else 1
+	var facing_offset := Vector2(hitbox_offset.x * facing_sign, hitbox_offset.y)
+	var hitbox_area := hitbox.new(stats, hitbox_lifetime, hitbox_shape)
+	hitbox_area.position = facing_offset
+	hitbox_area.scale = hitbox_scale
+	add_child(hitbox_area)
+
+func _on_timer_timeout() -> void:
+	is_coldown = false
+	
+
+func play_walk_animation():
+	enemy.play("walk")
 
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	player = body
-	player_chase = true
+		
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
-	player = null
-	player_chase = false
+	if body != player:
+		return
+	is_area_exited = true
+	
+func face_target(target: Node2D) -> void:
+	facing_left = target.global_position.x < global_position.x
+	enemy.flip_h = facing_left
+
+func _take_demage():
+	animated_hit()

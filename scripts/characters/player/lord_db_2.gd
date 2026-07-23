@@ -1,16 +1,18 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
 @export var stats: Stats
 @export var hitbox_shape: Shape2D
-
+@export var animated_sprite_lord_db: AnimatedSprite2D
 const SPEED = 100.0
 
 var last_direction := Vector2.RIGHT
 
-@onready var animated_sprite_lord_db: AnimatedSprite2D = $lord_animation_test
-@onready var attack_skill: PlayerAttackSkill = $SkillControllers/AttackSkill
-@onready var defense_skill: PlayerDefenseSkill = $SkillControllers/DefenseSkill
-@onready var charge_skill: PlayerChargeSkill = $SkillControllers/ChargeSkill
+#@onready var animated_sprite_lord_db: AnimatedSprite2D = $lord_animation_test
+@onready var skill_executor: PlayerSkillExecutor = $SkillControllers/SkillExecutor
+@onready var hurtbox: Hurtbox = $Hurtbox
+
+func _ready() -> void:
+	hurtbox.owner_hit.connect(_take_demage)
 
 func _physics_process(_delta: float) -> void:
 	var input_direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -40,19 +42,19 @@ func get_facing_sign() -> int:
 	return -1 if animated_sprite_lord_db.flip_h else 1
 
 func can_start_attack() -> bool:
-	return not defense_skill.is_active() and not charge_skill.is_active()
+	return not skill_executor.is_hurt() and not skill_executor.is_dead() and not skill_executor.is_defense_active() and not skill_executor.is_charge_active()
 
 func can_start_defense() -> bool:
-	return not attack_skill.is_active() and not charge_skill.is_active()
+	return not skill_executor.is_hurt() and not skill_executor.is_dead() and not skill_executor.is_attack_active() and not skill_executor.is_charge_active()
 
 func can_start_charge() -> bool:
-	return not attack_skill.is_active() and not defense_skill.is_active()
+	return not skill_executor.is_hurt() and not skill_executor.is_dead() and not skill_executor.is_attack_active() and not skill_executor.is_defense_active()
 
 func is_skill_active() -> bool:
-	return attack_skill.is_active() or defense_skill.is_active() or charge_skill.is_active()
+	return skill_executor.is_skill_active()
 
 func is_movement_blocked() -> bool:
-	return charge_skill.blocks_movement()
+	return skill_executor.is_movement_blocked()
 
 func _update_facing(input_direction: Vector2) -> void:
 	if input_direction == Vector2.ZERO:
@@ -65,4 +67,8 @@ func _update_facing(input_direction: Vector2) -> void:
 	elif input_direction.x > 0:
 		animated_sprite_lord_db.flip_h = false
 
-	
+func animated_hit() -> void:
+	skill_executor.handle_hit()
+
+func _take_demage():
+	animated_hit()

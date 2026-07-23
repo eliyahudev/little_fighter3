@@ -33,6 +33,9 @@ func start() -> bool:
 func is_active() -> bool:
 	return _active
 
+func stop() -> void:
+	_active = false
+
 func _finish_after_cooldown(run_id: int) -> void:
 	await get_tree().create_timer(cooldown_time).timeout
 

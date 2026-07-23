@@ -9,7 +9,7 @@ signal health_changed(cur_health: int, max_health: int)
 signal health_depleted
 
 @export var health: int = 10
-@export var defense: int = 1
+@export var defense: int = 10
 @export var attack: int = 1
 @export var faction : Faction = Faction.PLAYER
 @export var SPEED = 40.0
@@ -28,8 +28,11 @@ func initialize_stats()->void:
 	current_health = health
 
 func take_demage(amount : int) -> void:
-	current_health -= amount
-
+	var act_amount = amount - defense
+	if act_amount > 0:
+		current_health -= act_amount
+		if current_health < 0:
+			current_health = 0
 func _on_health_set(new_value: int) -> void:
 	health = clampi(new_value,0,current_max_health)
 	

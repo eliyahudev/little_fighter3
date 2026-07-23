@@ -8,12 +8,21 @@
 [ext_resource type="Script" uid="uid://1kgx6vnlqq6k" path="res://scripts/utils/demage_system/healthbar.gd" id="5_xgbcb"]
 [ext_resource type="Texture2D" uid="uid://ctm7xfgswbx14" path="res://assets/progress_bar/Vector/Green/bar_round_gloss_large.svg" id="6_drtk2"]
 [ext_resource type="Script" uid="uid://bxtlw58drcf8v" path="res://scripts/state_machine/state_machine.gd" id="8_sa1pt"]
+[ext_resource type="Script" uid="uid://d4dnix7dr2ef" path="res://resources/enemy/wait.gd" id="9_sgt37"]
+[ext_resource type="Script" uid="uid://bepqo46al7ejc" path="res://resources/enemy/patrol.gd" id="10_l2s7x"]
+[ext_resource type="Script" uid="uid://3uh73m5itp5q" path="res://resources/enemy/chase.gd" id="11_s8bju"]
+[ext_resource type="Script" uid="uid://cdfcisy8mhcxq" path="res://resources/enemy/dead.gd" id="12_l2s7x"]
 
 [sub_resource type="Resource" id="Resource_d76rb"]
 resource_local_to_scene = true
 script = ExtResource("2_1vwyd")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xgbcb"]
+size = Vector2(11, 17)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k85er"]
 atlas = ExtResource("2_ac4fm")
@@ -58,6 +67,14 @@ region = Rect2(390, 144, 46, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dd465"]
 atlas = ExtResource("2_ac4fm")
 region = Rect2(436, 144, 46, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l2s7x"]
+atlas = ExtResource("4_drtk2")
+region = Rect2(159, 567, 46, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8bju"]
+atlas = ExtResource("4_drtk2")
+region = Rect2(205, 567, 46, 47)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1kp85"]
 atlas = ExtResource("2_ac4fm")
@@ -195,6 +212,12 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_l2s7x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8bju")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_1kp85")
 }, {
 "duration": 1.0,
@@ -293,9 +316,6 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7n4ts"]
 size = Vector2(12, 10)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xgbcb"]
-size = Vector2(11, 17)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_7n4ts"]
 radius = 37.12142
 
@@ -304,40 +324,21 @@ texture = ExtResource("6_drtk2")
 
 [sub_resource type="Theme" id="Theme_sa1pt"]
 
-[sub_resource type="GDScript" id="GDScript_5exuc"]
-script/source = "extends State
-
-#@export var move_state: State
-#
-#func update(_delta: float) -> void:
-	##if owner.position.get_vector(\"ui_left\", \"ui_right\", \"ui_up\", \"ui_down\") != Vector2.ZERO:
-	#if owner.position != Vector2.ZERO:
-		#switch_state.emit(move_state)	
-"
-
-[sub_resource type="GDScript" id="GDScript_sa1pt"]
-script/source = "extends State
-
-#@export var idle_state: State
-#
-#func update(_delta: float) -> void:
-	##if Input.get_vector(\"ui_left\", \"ui_right\", \"ui_up\", \"ui_down\") == Vector2.ZERO:
-	#if owner.position == Vector2.ZERO:
-		#switch_state.emit(idle_state)	
-"
-
-[node name="bandit" type="CharacterBody2D" unique_id=530133315]
+[node name="bandit" type="CharacterBody2D" unique_id=530133315 node_paths=PackedStringArray("current_state")]
 y_sort_enabled = true
 position = Vector2(0, -1)
 motion_mode = 1
 script = ExtResource("1_oyxpn")
 stats = SubResource("Resource_d76rb")
+hitbox_shape = SubResource("RectangleShape2D_xgbcb")
+current_state = NodePath("StateMachine")
+attack_chance = 0.445
 
 [node name="animated_bandit" type="AnimatedSprite2D" parent="." unique_id=1823750986]
 y_sort_enabled = true
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_k85er")
-animation = &"die"
+animation = &"hitted"
 autoplay = "idle"
 frame = 4
 frame_progress = 1.0
@@ -347,12 +348,13 @@ position = Vector2(1, 5)
 shape = SubResource("RectangleShape2D_7n4ts")
 
 [node name="Timer" type="Timer" parent="." unique_id=1121795244]
-wait_time = 0.255
+wait_time = 1.1689999999999998
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=767892499]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=767892499 node_paths=PackedStringArray("skill_state")]
 light_mask = 3
 visibility_layer = 3
 script = ExtResource("5_oyxpn")
+skill_state = NodePath("../StateMachine")
 metadata/_custom_type_script = "uid://dajsfdk7uf4e3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1105475041]
@@ -392,18 +394,31 @@ max_value = 10.0
 
 [node name="StateMachine" type="Node" parent="." unique_id=1822000712 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("8_sa1pt")
-initial_state = NodePath("Idle")
+initial_state = NodePath("wait")
 metadata/_custom_type_script = "uid://bxtlw58drcf8v"
 
-[node name="Idle" type="Node" parent="StateMachine" unique_id=1493629056]
-script = SubResource("GDScript_5exuc")
+[node name="wait" type="Node" parent="StateMachine" unique_id=1493629056 node_paths=PackedStringArray("player", "chase_state")]
+script = ExtResource("9_sgt37")
+player = NodePath("../..")
+chase_state = NodePath("../Chase")
 metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
 
-[node name="Move" type="Node" parent="StateMachine" unique_id=684927727]
-script = SubResource("GDScript_sa1pt")
+[node name="Patrol" type="Node" parent="StateMachine" unique_id=684927727]
+script = ExtResource("10_l2s7x")
 metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
 
-[connection signal="animation_finished" from="animated_bandit" to="." method="_on_animated_bandit_animation_finished"]
+[node name="Chase" type="Node" parent="StateMachine" unique_id=1982810781 node_paths=PackedStringArray("player", "wait_state", "die_state")]
+script = ExtResource("11_s8bju")
+player = NodePath("../..")
+wait_state = NodePath("../wait")
+die_state = NodePath("../Dead")
+metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
+
+[node name="Dead" type="Node" parent="StateMachine" unique_id=5607864]
+script = ExtResource("12_l2s7x")
+metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
+
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_entered" from="detection_area" to="StateMachine/wait" method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
-[connection signal="body_shape_exited" from="detection_area" to="." method="_on_detection_area_body_shape_exited"]
+[connection signal="body_exited" from="detection_area" to="StateMachine/Chase" method="_on_detection_area_body_exited"]

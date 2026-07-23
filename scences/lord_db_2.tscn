@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://chqgtdgidvvnm" path="res://example/sprites/lord_db_attacks.svg" id="1_p1nlg"]
 [ext_resource type="Script" uid="uid://dyk505td5ir0l" path="res://scripts/utils/stats/stats.gd" id="2_265xh"]
 [ext_resource type="Texture2D" uid="uid://4sntgafnpo" path="res://example/lord_db_defense.svg" id="3_ljpb5"]
+[ext_resource type="Texture2D" uid="uid://b1ydcofscqdrd" path="res://example/fainted_lord_db.svg" id="4_f87wk"]
 [ext_resource type="Texture2D" uid="uid://ckv1ntkyfmqjr" path="res://assets/progress_bar/Vector/Blue/bar_round_gloss_large.svg" id="6_0rupd"]
 [ext_resource type="Script" uid="uid://1kgx6vnlqq6k" path="res://scripts/utils/demage_system/healthbar.gd" id="6_kbd2u"]
 [ext_resource type="Script" uid="uid://dajsfdk7uf4e3" path="res://scripts/utils/demage_system/hurtbox.gd" id="7_kbd2u"]
@@ -18,10 +19,13 @@
 [ext_resource type="Script" uid="uid://bsmr7vp6yaf3x" path="res://scripts/characters/player/skills/player_attack_skill.gd" id="16_attack"]
 [ext_resource type="Script" uid="uid://b46ntgttvxfgb" path="res://scripts/characters/player/skills/player_defense_skill.gd" id="17_defense"]
 [ext_resource type="Script" uid="uid://c7ms5w2tuw78y" path="res://scripts/characters/player/skills/player_charge_skill.gd" id="18_charge"]
+[ext_resource type="Script" uid="uid://bhxeq3lf4qrep" path="res://scripts/characters/player/skills/player_skill_executor.gd" id="19_executor"]
 
 [sub_resource type="Resource" id="Resource_265xh"]
 resource_local_to_scene = true
 script = ExtResource("2_265xh")
+defense = 2
+attack = 10
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sad22"]
@@ -41,6 +45,22 @@ region = Rect2(300, 900, 150, 150)
 [sub_resource type="AtlasTexture" id="AtlasTexture_sad22"]
 atlas = ExtResource("1_p1nlg")
 region = Rect2(450, 900, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3bev"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(0, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wiax0"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(175, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uq667"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(350, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dpj0j"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(525, 740, 175, 148)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q0std"]
 atlas = ExtResource("3_ljpb5")
@@ -69,6 +89,42 @@ region = Rect2(750, 600, 150, 150)
 [sub_resource type="AtlasTexture" id="AtlasTexture_3bgxr"]
 atlas = ExtResource("3_ljpb5")
 region = Rect2(900, 600, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f87wk"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(0, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7tl3"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(175, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7xrd6"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(350, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwrfj"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(525, 740, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wsoaw"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(0, 888, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ikifl"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(175, 888, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k2hv7"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(350, 888, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xhse"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(525, 888, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7mrp"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(700, 888, 175, 148)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_41gvn"]
 atlas = ExtResource("1_p1nlg")
@@ -109,6 +165,22 @@ region = Rect2(300, 450, 150, 150)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ww63l"]
 atlas = ExtResource("1_p1nlg")
 region = Rect2(450, 450, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8b4b"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(0, 592, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xs1xu"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(175, 592, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ut22p"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(350, 592, 175, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lue1m"]
+atlas = ExtResource("4_f87wk")
+region = Rect2(525, 592, 175, 148)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o32e7"]
 atlas = ExtResource("1_p1nlg")
@@ -206,6 +278,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_p3bev")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wiax0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uq667")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dpj0j")
+}],
+"loop": 0,
+"name": &"critic hitted",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_q0std")
 }, {
 "duration": 1.0,
@@ -229,6 +318,38 @@ animations = [{
 "loop": 0,
 "name": &"defense",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f87wk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f7tl3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7xrd6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwrfj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wsoaw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ikifl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k2hv7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xhse")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7mrp")
+}],
+"loop": 0,
+"name": &"die",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -284,6 +405,23 @@ animations = [{
 "loop": 1,
 "name": &"fly",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8b4b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xs1xu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ut22p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lue1m")
+}],
+"loop": 0,
+"name": &"hitted",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -363,19 +501,20 @@ texture = ExtResource("6_0rupd")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ddfwl"]
 size = Vector2(18.711739, 17.99748)
 
-[node name="Player" type="CharacterBody2D" unique_id=1473978371]
+[node name="Player" type="CharacterBody2D" unique_id=1473978371 node_paths=PackedStringArray("animated_sprite_lord_db")]
 y_sort_enabled = true
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_kbd2u")
 stats = SubResource("Resource_265xh")
 hitbox_shape = SubResource("RectangleShape2D_sad22")
+animated_sprite_lord_db = NodePath("lord_animation_test")
 
 [node name="lord_animation_test" type="AnimatedSprite2D" parent="." unique_id=1304977243]
 position = Vector2(0, -3.3881318e-21)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_q0std")
-animation = &"idle"
+animation = &"hitted"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1022065790]
@@ -404,8 +543,9 @@ offset_right = -0.3916855
 offset_bottom = 36.61067
 scale = Vector2(0.696523, 0.76415867)
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=1065349448]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1065349448 node_paths=PackedStringArray("skill_state")]
 script = ExtResource("7_kbd2u")
+skill_state = NodePath("../st_parent/sm_stat")
 metadata/_custom_type_script = "uid://dajsfdk7uf4e3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2008203896]
@@ -415,17 +555,26 @@ shape = SubResource("RectangleShape2D_ddfwl")
 
 [node name="SkillControllers" type="Node" parent="." unique_id=455741111]
 
-[node name="AttackSkill" type="Node" parent="SkillControllers" unique_id=1188815407]
+[node name="SkillExecutor" type="Node" parent="SkillControllers" unique_id=12746041 node_paths=PackedStringArray("state_machine", "attack_skill", "defense_skill", "charge_skill")]
+script = ExtResource("19_executor")
+state_machine = NodePath("../../st_parent/sm_stat")
+attack_skill = NodePath("../skills/AttackSkill")
+defense_skill = NodePath("../skills/DefenseSkill")
+charge_skill = NodePath("../skills/ChargeSkill")
+
+[node name="skills" type="Node" parent="SkillControllers" unique_id=1310376504]
+
+[node name="AttackSkill" type="Node" parent="SkillControllers/skills" unique_id=1188815407]
 script = ExtResource("16_attack")
-player_path = NodePath("../..")
+player_path = NodePath("../../..")
 
-[node name="DefenseSkill" type="Node" parent="SkillControllers" unique_id=272673316]
+[node name="DefenseSkill" type="Node" parent="SkillControllers/skills" unique_id=272673316]
 script = ExtResource("17_defense")
-player_path = NodePath("../..")
+player_path = NodePath("../../..")
 
-[node name="ChargeSkill" type="Node" parent="SkillControllers" unique_id=55350109]
+[node name="ChargeSkill" type="Node" parent="SkillControllers/skills" unique_id=55350109]
 script = ExtResource("18_charge")
-player_path = NodePath("../..")
+player_path = NodePath("../../..")
 
 [node name="st_parent" type="Node" parent="." unique_id=1720644893]
 
@@ -457,19 +606,16 @@ metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
 [node name="attack" type="Node" parent="st_parent/sm_stat" unique_id=37731037 node_paths=PackedStringArray("idle_state")]
 script = ExtResource("11_y683u")
 idle_state = NodePath("../Idle_stat")
-skill_path = NodePath("../../../SkillControllers/AttackSkill")
 metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
 
 [node name="defense" type="Node" parent="st_parent/sm_stat" unique_id=2101589539 node_paths=PackedStringArray("idle_state")]
 script = ExtResource("13_l6ijb")
 idle_state = NodePath("../Idle_stat")
-skill_path = NodePath("../../../SkillControllers/DefenseSkill")
 metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
 
 [node name="charge" type="Node" parent="st_parent/sm_stat" unique_id=534030501 node_paths=PackedStringArray("idle_state")]
 script = ExtResource("14_l6ijb")
 idle_state = NodePath("../Idle_stat")
-skill_path = NodePath("../../../SkillControllers/ChargeSkill")
 metadata/_custom_type_script = "uid://cjgsm4dyklc7k"
 
 [node name="State_queue" type="Node" parent="st_parent" unique_id=141271326]

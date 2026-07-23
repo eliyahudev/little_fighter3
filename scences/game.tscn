@@ -10,47 +10,63 @@
 [sub_resource type="Resource" id="Resource_yru2q"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 3
+attack = 5
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_cho2i"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_hnbpv"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_lvua1"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_a0bl5"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_nn1ya"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_ua0fu"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="Resource" id="Resource_wctid"]
 resource_local_to_scene = true
 script = ExtResource("2_cho2i")
+defense = 1
+attack = 5
 faction = 1
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
@@ -5708,30 +5724,37 @@ y_sort_enabled = true
 [node name="bandit" parent="enemies/bandits" unique_id=530133315 instance=ExtResource("3_hnbpv")]
 position = Vector2(429, 334)
 stats = SubResource("Resource_cho2i")
+attack_roll_interval = 0.5
 
 [node name="bandit2" parent="enemies/bandits" unique_id=1352558833 instance=ExtResource("3_hnbpv")]
 position = Vector2(194, 276)
 stats = SubResource("Resource_hnbpv")
+attack_roll_interval = 0.5
 
 [node name="bandit3" parent="enemies/bandits" unique_id=56668807 instance=ExtResource("3_hnbpv")]
 position = Vector2(290, -63)
 stats = SubResource("Resource_lvua1")
+attack_roll_interval = 0.5
 
 [node name="bandit4" parent="enemies/bandits" unique_id=535891845 instance=ExtResource("3_hnbpv")]
 position = Vector2(150, 149)
 stats = SubResource("Resource_a0bl5")
+attack_roll_interval = 0.5
 
 [node name="bandit5" parent="enemies/bandits" unique_id=1063742537 instance=ExtResource("3_hnbpv")]
 position = Vector2(525, 199)
 stats = SubResource("Resource_nn1ya")
+attack_roll_interval = 0.5
 
 [node name="bandit6" parent="enemies/bandits" unique_id=1411913468 instance=ExtResource("3_hnbpv")]
 position = Vector2(571, -25)
 stats = SubResource("Resource_ua0fu")
+attack_roll_interval = 0.5
 
 [node name="bandit7" parent="enemies/bandits" unique_id=815984659 instance=ExtResource("3_hnbpv")]
 position = Vector2(107, 57)
 stats = SubResource("Resource_wctid")
+attack_roll_interval = 0.5
 
 [node name="background_layers" type="Node2D" parent="." unique_id=1998970204]
 y_sort_enabled = true

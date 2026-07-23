@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cisprwh80xk6m"]
+
+[ext_resource type="Script" uid="uid://dn4q84anj4fe2" path="res://scripts/characters/player/lord_db_2.gd" id="1_1s5i0"]
+
+[node name="Player" type="CharacterBody2D" unique_id=758542341]
+script = ExtResource("1_1s5i0")
+metadata/_custom_type_script = "uid://dn4q84anj4fe2"
