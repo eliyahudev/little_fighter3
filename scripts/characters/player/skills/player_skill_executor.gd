@@ -19,8 +19,8 @@ func _ready() -> void:
 func is_skill_active() -> bool:
 	return _is_hurt or _is_dead or attack_skill.is_active() or defense_skill.is_active() or charge_skill.is_active()
 
-func is_movement_blocked() -> bool:
-	return _is_hurt or _is_dead or charge_skill.blocks_movement()
+#func is_movement_blocked() -> bool:
+	#return _is_hurt or _is_dead or charge_skill.blocks_movement()
 
 func is_attack_active() -> bool:
 	return attack_skill.is_active()
@@ -41,22 +41,22 @@ func handle_hit() -> void:
 	if _is_dead:
 		return
 
-	_stop_all_skills()
-	_hurt_run_id += 1
-
-	if player.stats.health <= 0:
-		_is_dead = true
-		_is_hurt = false
-		player.play_animation("die")
-		return
-
-	_is_hurt = true
-	if player.stats.health <= player.stats.current_max_health / 10.0:
-		player.play_animation("critic hitted")
-	else:
-		player.play_animation("hitted")
-
-	_finish_hurt(_hurt_run_id)
+	#_stop_all_skills()
+	#_hurt_run_id += 1
+#
+	#if player.stats.health <= 0:
+		#_is_dead = true
+		#_is_hurt = false
+		#player.play_animation("die")
+		#return
+#
+	#_is_hurt = true
+	#if player.stats.health <= player.stats.current_max_health / 10.0:
+		#player.play_animation("critic hitted")
+	#else:
+		#player.play_animation("hitted")
+#
+	#_finish_hurt(_hurt_run_id)
 
 func _on_state_changed(previous_state: State, active_state: State) -> void:
 	_stop_state_skill(previous_state)
@@ -67,8 +67,6 @@ func _start_state_skill(state: State) -> void:
 		return
 
 	match state.name:
-		"attack":
-			attack_skill.start()
 		"defense":
 			defense_skill.start()
 		"charge":

@@ -15,19 +15,11 @@ var _run_id := 0
 func can_start() -> bool:
 	return not _active and not _cooling_down and player.can_start_attack()
 
-func start() -> bool:
-	if not can_start():
-		return false
-
-	_active = true
-	_cooling_down = true
-	_run_id += 1
-	var current_run_id := _run_id
-
+func start(state_duration: int) -> bool:
 	player.play_animation("punch")
 	var facing_offset := Vector2(hitbox_offset.x * player.get_facing_sign(), hitbox_offset.y)
-	player.spawn_hitbox(hitbox_lifetime, facing_offset, hitbox_scale)
-	_finish_after_cooldown(current_run_id)
+	#player.spawn_hitbox(hitbox_lifetime, facing_offset, hitbox_scale)
+	player.spawn_hitbox(state_duration, facing_offset, hitbox_scale)
 	return true
 
 func is_active() -> bool:

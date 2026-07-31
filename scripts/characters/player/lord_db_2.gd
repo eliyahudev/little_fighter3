@@ -6,25 +6,45 @@ class_name Player extends CharacterBody2D
 const SPEED = 100.0
 
 var last_direction := Vector2.RIGHT
+var is_defende := false
 
 #@onready var animated_sprite_lord_db: AnimatedSprite2D = $lord_animation_test
 @onready var skill_executor: PlayerSkillExecutor = $SkillControllers/SkillExecutor
 @onready var hurtbox: Hurtbox = $Hurtbox
 
+signal attack_pressed
+signal walk_pressed
+
 func _ready() -> void:
 	hurtbox.owner_hit.connect(_take_demage)
 
 func _physics_process(_delta: float) -> void:
+	if Input.is_action_just_pressed("mealy-attack") or Input.is_action_just_pressed("mid-range-attack"):
+		attack_pressed.emit()
+	if Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down"):
+		walk_pressed.emit()
+
+func player_idle()-> void:
+	play_animation("idle")
+	move_and_slide()
+	
+func walk():
 	var input_direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 	_update_facing(input_direction)
-	velocity = Vector2.ZERO if is_movement_blocked() else input_direction * SPEED
-
-	if not is_skill_active():
-		play_animation("idle" if input_direction == Vector2.ZERO else "walk")
+	#velocity = Vector2.ZERO if is_movement_blocked() else input_direction * SPEED
+	velocity = input_direction * SPEED
+	
+	play_animation("walk")
+	#if not is_skill_active():
+		#play_animation("idle" if input_direction == Vector2.ZERO else "walk")
 
 	move_and_slide()
 
+func player_dead() -> void:
+	play_animation("die")
+	move_and_slide()
+	
 func play_animation(animation_name: StringName) -> void:
 	if animated_sprite_lord_db.animation == animation_name and animated_sprite_lord_db.is_playing():
 		return
@@ -53,8 +73,8 @@ func can_start_charge() -> bool:
 func is_skill_active() -> bool:
 	return skill_executor.is_skill_active()
 
-func is_movement_blocked() -> bool:
-	return skill_executor.is_movement_blocked()
+#func is_movement_blocked() -> bool:
+	#return skill_executor.is_movement_blocked()
 
 func _update_facing(input_direction: Vector2) -> void:
 	if input_direction == Vector2.ZERO:

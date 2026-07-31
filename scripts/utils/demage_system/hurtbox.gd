@@ -21,6 +21,6 @@ func _ready() -> void:
 func recive_hit(demage:int) ->void:
 	if skill_state.active_state != null:
 		print("skill_state.active_state name: ", skill_state.active_state.name)
-		if skill_state.active_state.name != "defense":
+		if skill_state.active_state.name != "defense" and not owner.is_defende:
 			owner_hit.emit()
 			owner_stats.take_demage(demage)
