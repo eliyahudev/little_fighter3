@@ -2,6 +2,8 @@ class_name State extends Node
 
 signal switch_state(state:State)
 
+var state_lock: bool = false
+
 func enter_state() -> void:
 	pass
 	

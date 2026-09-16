@@ -51,6 +51,7 @@ func _on_area_entered(area:Area2D)	-> void:
 		else:
 			hit_log.log_hit(hurtbox_owner)
 	var demage = attacker_stats.attack
+	print("[DEBUG] hitbox.gd | demage = ", demage)
 	if randf_range(0,1) < 0.1:
 		demage *= 1.1  
 	area.recive_hit(demage)

@@ -10,6 +10,7 @@ func enter_state() -> void:
 	_elapsed_time = 0.0
 
 func update(_delta: float) -> void:
+	state_lock = true
 	_elapsed_time += _delta
 	owner.skill_executor.attack_skill.start(state_duration)
 	#_start_state_skill SHOULD BE ATTACK HERE

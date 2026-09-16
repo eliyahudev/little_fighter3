@@ -8,7 +8,7 @@ enum Faction {
 signal health_changed(cur_health: int, max_health: int) 
 signal health_depleted
 
-@export var health: int = 10
+@export var health: int = 100
 @export var defense: int = 10
 @export var attack: int = 1
 @export var faction : Faction = Faction.PLAYER

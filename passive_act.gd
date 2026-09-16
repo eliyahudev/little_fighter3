@@ -1,8 +1,7 @@
 extends State
 
-@export var move_state: State
+@export var idle_state: State
 @export var die_state: State
-@export var passive_act_state: State
 @export var passive_sm: StateMachine
 
 var is_activate_state = false
@@ -12,15 +11,18 @@ func _ready() -> void:
 
 func update(_delta: float) -> void:
 	is_activate_state = true
-	if owner.action_pressed():
-		passive_sm.enable_sm()	
-		switch_state.emit(passive_act_state)	
-	else:
-		owner.player_idle()
 	
-func _on_player_walk_pressed() -> void:
-	switch_state.emit(move_state)	
-
+	#if passive_sm.active_state.name == name:
+	print("passive_sm.active_state: ", passive_sm.active_state.name)
+	if passive_sm.active_state.state_lock:
+		print(name)
+		_idle()
+	
+func _idle() -> void:
+	# is_activate_state = false
+	switch_state.emit(idle_state)	
+	passive_sm.disable_sm()	
+	
 func die() -> void:
 	if is_activate_state:
 		is_activate_state = false

@@ -17,8 +17,9 @@
 resource_local_to_scene = true
 script = ExtResource("2_1vwyd")
 defense = 1
-attack = 5
+attack = 10
 faction = 1
+MAX_HEALTH = 100.0
 metadata/_custom_type_script = "uid://dyk505td5ir0l"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xgbcb"]
@@ -368,7 +369,7 @@ position = Vector2(1, 5)
 shape = SubResource("RectangleShape2D_7n4ts")
 
 [node name="Timer" type="Timer" parent="." unique_id=1121795244]
-wait_time = 0.564
+wait_time = 0.331
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=767892499 node_paths=PackedStringArray("skill_state")]
 light_mask = 3

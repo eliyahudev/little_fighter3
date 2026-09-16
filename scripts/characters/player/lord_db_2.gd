@@ -1,7 +1,6 @@
 class_name Player extends CharacterBody2D
 
 @export var stats: Stats
-@export var hitbox_shape: Shape2D
 @export var animated_sprite_lord_db: AnimatedSprite2D
 const SPEED = 100.0
 
@@ -12,15 +11,12 @@ var is_defende := false
 @onready var skill_executor: PlayerSkillExecutor = $SkillControllers/SkillExecutor
 @onready var hurtbox: Hurtbox = $Hurtbox
 
-signal attack_pressed
 signal walk_pressed
 
 func _ready() -> void:
 	hurtbox.owner_hit.connect(_take_demage)
 
 func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("mealy-attack") or Input.is_action_just_pressed("mid-range-attack"):
-		attack_pressed.emit()
 	if Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down"):
 		walk_pressed.emit()
 
@@ -51,12 +47,12 @@ func play_animation(animation_name: StringName) -> void:
 
 	animated_sprite_lord_db.play(animation_name)
 
-func spawn_hitbox(hitbox_lifetime: float, offset: Vector2, hitbox_scale := Vector2.ONE) -> Area2D:
-	var hitbox_area := hitbox.new(stats, hitbox_lifetime, hitbox_shape)
-	hitbox_area.position = offset
-	hitbox_area.scale = hitbox_scale
-	add_child(hitbox_area)
-	return hitbox_area
+#func spawn_hitbox(hitbox_lifetime: float, offset: Vector2, hitbox_scale := Vector2.ONE) -> Area2D:
+	#var hitbox_area := hitbox.new(stats, hitbox_lifetime, hitbox_shape)
+	#hitbox_area.position = offset
+	#hitbox_area.scale = hitbox_scale
+	#add_child(hitbox_area)
+	#return hitbox_area
 
 func get_facing_sign() -> int:
 	return -1 if animated_sprite_lord_db.flip_h else 1
@@ -92,3 +88,9 @@ func animated_hit() -> void:
 
 func _take_demage():
 	animated_hit()
+
+func action_pressed() -> bool:
+	return Input.is_action_just_pressed("defense") or \
+		Input.is_action_just_pressed("charge") or \
+		Input.is_action_just_pressed("mealy-attack")
+		
